@@ -30,20 +30,27 @@
         .btn-lg {
             width: 150px;
         }
+        .my-footer {
+            padding-top: 200px;  /* Este valor pode ser ajustado para obter o espaçamento desejado */
+        }
+        .content {
+        margin-bottom: 100px;
+        }
     </style>
-    <title>Search</title>
+    <title>Catecismo da Igreja Católica</title>
 </head>
 <body id="top">
 
 <nav class="navbar navbar-dark bg-dark">
-    <span class="navbar-brand mb-0 h1">Catecismo</span>
+    <span class="navbar-brand mb-0 h1">Catecismo indexado</span>
 </nav>
 
-<div class="container-fluid">
+<div class="container-fluid content">
     <div class="text-center">
         <form method="post" class="form-inline justify-content-center mt-5">
-            <input type="text" name="text" class="form-control rounded-pill" style="width: 800px; height: 60px;" placeholder="Digite um termo para pesquisa e tecle enter" required autofocus>
+            <input type="text" name="text" class="form-control rounded-pill" style="width: 800px; height: 60px;" placeholder=" Digite um termo para pesquisa e tecle enter" required autofocus>
             <button type="submit" class="btn btn-primary btn-lg ml-2">Pesquisar</button>
+            <button type="button" class="btn btn-secondary btn-lg ml-2" onclick="clearSearch()">Limpar</button>
         </form>
     </div>
     {{if .}}
@@ -68,7 +75,7 @@
     {{end}}
 </div>
 
-<footer class="fixed-bottom navbar-dark bg-dark py-3">
+<footer class="fixed-bottom navbar-dark bg-dark text-center py-3 my-footer"> <!-- Classe my-footer adicionada -->
   <div class="container-fluid">  <!-- container-fluid utilizado -->
       <div class="row">
           <div class="col-md-8">
@@ -86,5 +93,17 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+   function clearSearch() {
+    var inputField = document.querySelector('input[name="text"]');
+    var table = document.querySelector('table');
+    inputField.value = '';  // Limpa o campo de texto
+    table.tHead.innerHTML = '';  // Limpa o cabeçalho da tabela
+    table.tBodies[0].innerHTML = '';  // Limpa o corpo da tabela
+    inputField.focus();  // Coloca o foco no campo de texto
+}
+</script>
+
 </body>
 </html>

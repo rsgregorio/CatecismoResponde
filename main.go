@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"html/template"
 	"net/http"
-	"regexp"
+	"strings"
 
 	_ "github.com/lib/pq"
 )
@@ -15,9 +15,11 @@ type Data struct {
 }
 
 func highlight(text, query string) template.HTML {
-	re := regexp.MustCompile(`(?i)` + regexp.QuoteMeta(query))
-	highlightedText := re.ReplaceAllString(text, `<mark>$0</mark>`)
-	return template.HTML(highlightedText)
+	words := strings.Fields(query) // Divide o texto em palavras
+	for _, word := range words {
+		text = strings.ReplaceAll(text, word, "<mark>"+word+"</mark>")
+	}
+	return template.HTML(text)
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {
@@ -27,6 +29,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(err)
 	}
+	defer db.Close()
 
 	if r.Method != http.MethodPost {
 		tmpl.Execute(w, nil)
@@ -36,20 +39,24 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	text := r.FormValue("text")
 	data := []Data{}
 
-	rows, err := db.Query("SELECT numero, texto FROM paragrafos WHERE texto ILIKE $1 ORDER BY numero", "%"+text+"%")
+	words := strings.Fields(text)         // Divide o texto em palavras
+	tsQuery := strings.Join(words, " & ") // Junta as palavras com o operador &
+
+	rows, err := db.Query("SELECT numero, texto FROM paragrafos WHERE to_tsvector('portuguese', texto) @@ to_tsquery('portuguese', $1) ORDER BY numero", tsQuery)
 	if err != nil {
 		panic(err)
 	}
+	defer rows.Close()
 
 	for rows.Next() {
 		var numero string
-		var texto template.HTML
+		var texto string
 		err = rows.Scan(&numero, &texto)
 		if err != nil {
 			panic(err)
 		}
-		texto = highlight(string(texto), text)
-		data = append(data, Data{Numero: numero, Texto: texto})
+		textoHTML := highlight(texto, text)
+		data = append(data, Data{Numero: numero, Texto: textoHTML})
 	}
 
 	tmpl.Execute(w, data)
