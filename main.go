@@ -32,10 +32,11 @@ func main() {
 	}
 	defer db.Close()
 
-	tmpl := template.Must(template.ParseFiles("views/template.html"))
+	tmpl := template.Must(template.ParseFiles("views/template.html", "views/menu.html", "views/content.html", "views/footer.html", "views/sobre.html"))
 
 	http.HandleFunc("/", controllers.Handler(db, tmpl))
 	http.Handle("/static/", http.StripPrefix("/static", http.FileServer(http.Dir("static"))))
+	http.HandleFunc("/sobre", controllers.Sobre(tmpl))
 
 	http.ListenAndServe(":8080", nil)
 }

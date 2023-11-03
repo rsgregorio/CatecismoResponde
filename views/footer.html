@@ -1,0 +1,40 @@
+</footer>
+
+
+
+
+  
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+   function clearSearch() {
+    var inputField = document.querySelector('input[name="text"]');
+    var table = document.querySelector('table');
+    // inputField.value = '';  // Limpa o campo de texto
+    table.tHead.innerHTML = '';  // Limpa o cabeçalho da tabela
+    table.tBodies[0].innerHTML = '';  // Limpa o corpo da tabela
+    inputField.focus();  // Coloca o foco no campo de texto
+}
+    
+    function pesquisar(termo) {
+        var inputField = document.querySelector('input[name="text"]');
+        inputField.value = termo;
+        var form = document.querySelector('form');
+        // form.submit();
+    }
+ 
+    function copyText(num) {
+        var text = document.getElementById('text-' + num).innerText;
+        var textarea = document.createElement('textarea');
+        textarea.value = text;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+    }
+</script>
+
+</body>
+</html>
