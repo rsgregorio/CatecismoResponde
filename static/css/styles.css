@@ -20,13 +20,15 @@ body {
     left: 0;
     z-index: 1030;
 }
-.btn-lg {
-    width: 150px;
-}
+
 .my-footer {
     padding-top: 200px;  /* Este valor pode ser ajustado para obter o espaçamento desejado */
 }
 .content {
 margin-bottom: 100px;
 }
-   
+
+.btn-group-toggle > .btn-group > .btn {
+    margin-bottom: 5px;
+    margin-right: 5px;
+}

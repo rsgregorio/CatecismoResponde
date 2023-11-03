@@ -23,10 +23,10 @@ func FetchData(db *sql.DB, text string) ([]Data, error) {
 	ilikeQuery := ""
 	params := []interface{}{}
 	for i, word := range words {
-		ilikeQuery += "unaccent(texto) ILIKE unaccent($" + strconv.Itoa(i+1) + ") AND "
+		ilikeQuery += "unaccent(texto) ILIKE unaccent($" + strconv.Itoa(i+1) + ") OR "
 		params = append(params, "%"+word+"%")
 	}
-	ilikeQuery = strings.TrimSuffix(ilikeQuery, " AND ") // Removendo o último " AND "
+	ilikeQuery = strings.TrimSuffix(ilikeQuery, " OR ") // Removendo o último " OR "
 
 	// Criando a string da consulta.
 	queryString := "SELECT numero, texto FROM paragrafos WHERE " + ilikeQuery + " ORDER BY numero"
